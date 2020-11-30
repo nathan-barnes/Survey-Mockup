@@ -1,0 +1,11 @@
+session_name: glitch-zea-surveying-machine
+suppress_history: false
+windows:
+  - layout: main-vertical
+    panes:
+      - ./start.sh
+      - ${EDITOR} -S
+  - panes:
+      - shell_command:
+          - git fetch
+          - git status
