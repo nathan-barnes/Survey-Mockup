@@ -173,6 +173,7 @@ code {
 
 .UserChipSetHolder {
   flex-grow: 1;
+  position: right;
 }
 
 .App-link {
@@ -187,4 +188,11 @@ code {
 .tree-view-container {
   height: 100%;
   overflow: auto;
+}
+
+zea-toolbar.hydrated {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 70px;
 }

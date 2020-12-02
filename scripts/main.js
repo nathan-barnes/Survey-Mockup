@@ -27,6 +27,12 @@ const {
   BillboardItem
 } = window.zeaEngine
 
+
+// const {
+//   labelFontColor,
+//   outlineColor
+// } = window.zeaEngine
+
 const { GLCADPass, CADAsset } = window.zeaCad;
 
 console.clear()
@@ -185,7 +191,7 @@ scene.getRoot().addChild(assetPoints)
 
 
 const creatPoints = (name, x, y, z) => {
-  const sphere = new Sphere(0.5)
+  const sphere = new Sphere(0.05)
   const material = new Material('myMat', 'SimpleSurfaceShader')
   material.getParameter('BaseColor').setValue(new Color(1, 0, 0))
 
@@ -222,8 +228,8 @@ const creatPoints = (name, x, y, z) => {
   createPoint(name, coordSysConversion.transformVec3(pos))
 }
 
-creatPoints('test', 1, 1, 1)
-creatPoints('test2', 2, 2, 2)
+//creatPoints('test', 1, 1, 1)
+//creatPoints('test2', 2, 2, 2)
 
 const point1 = new Vec3(1,2,1)
 const point2 = new Vec3(5,5,5)
@@ -239,7 +245,7 @@ const material = new Material('myMat', 'SimpleSurfaceShader')
 material.getParameter('BaseColor').setValue(new Color(1, 0, 0))
 
 
-
+// Construct Line -----------------------------------------------
 
 const numVertices = 2
 dimLine.setNumVertices(numVertices)
@@ -273,7 +279,8 @@ assetPoints.addChild(geomItem1);
 let url =
   // "https://cdn.glitch.com/193338d7-ba53-46cc-8930-c8d69b1c0a34%2F190153_ZSK_MockUpB_Steel-Anchors.zcad?v=1606232103341";
   // "https://cdn.glitch.com/193338d7-ba53-46cc-8930-c8d69b1c0a34%2F190153_ZSK_MockUpB_Steel-Anchors.zcad?v=1606232103341";
-  "https://cdn.glitch.com/193338d7-ba53-46cc-8930-c8d69b1c0a34%2F190153_ZSK_MockUpB_Steel-Anchors.zcad?v=1606326011240";
+  // "https://cdn.glitch.com/193338d7-ba53-46cc-8930-c8d69b1c0a34%2F190153_ZSK_MockUpB_Steel-Anchors.zcad?v=1606326011240";
+  "https://cdn.glitch.com/193338d7-ba53-46cc-8930-c8d69b1c0a34%2F190153_ZSK_MockUpB_Steel-Anchors-M.zcad?v=1606784072811";
 const cadAsset = new CADAsset();
 cadAsset.getParameter("DataFilePath").setValue(url);
 scene.getRoot().addChild(cadAsset);
@@ -325,11 +332,11 @@ const session = new Session(userData, socketUrl);
 session.joinRoom("dfghjkl");
 
 session.sub("user-joined", user => {
-  console.log("User joined:", user);
+  // console.log("User joined:", user);
 });
 
 session.sub("user-left", user => {
-  console.log("User left");
+  // console.log("User left");
 });
 
 session.sub("userPressedAKey", data => {
@@ -373,8 +380,46 @@ sceneTreeView.rootItem = scene.getRoot();
 
 
 
+///////- Project Point ------------------------------------------------------\
+
+// const projPoint = (plane, anchPointName, srvyPointName) => {
+  
+//   const origin = assetPoints.getChildByName('point-' + anchPointName)
+//   const srvyPoint = assetPoints.getChildByName('point-' + srvyPointName)
+  
+//   // console.log(plane, origin, srvyPoint)
+//   console.log(origin)
+//   // console.log(origin.getParameter("X"), srvyPoint)
+  
+//   const x = origin.x - srvyPoint.x;
+//   const y = origin.y - srvyPoint.y;
+//   const z = origin.z - srvyPoint.z;
+//   console.log(x,y,z);
+//   const compVect = new Vec3(x,y,z);
+  
+//   console.log(compVect)
+//   console.log(plane.zAxis)
+//   const dot = plane.zAxis.dot(compVect);
+//   console.log(dot)
+  
+//   const deltaVect = dot * plane.zAxis * -1
+  
+//   console.log( deltaVect)
+//   console.log(srvyPoint )
+//   // const dx = srvyPoint.x - deltaVect.x;
+//   // const dy = srvyPoint.y - deltaVect.y;
+//   // const dz = srvyPoint.z - deltaVect.z;
+  
+//   // console.log(dx,dy,dz)
+//   // const projPoint = creatPoints('projPt', dx, dy, dz)
+  
+// }
+
 ///////- get atttribute ------------------------------------------------------\
 //it would be greate to populate a list of anchors to choose from----------/
+
+const billboards = new TreeItem('billboard')
+scene.getRoot().addChild(billboards)
 
 cadAsset.on('loaded', () => {
   // console.log(cadAsset.getName())
@@ -383,16 +428,126 @@ cadAsset.on('loaded', () => {
   
   var typedArr = new Float32Array(ZanchorPlane);
   
-  const plane = new Mat4(typedArr)
+  const planeMat4 = new Mat4(typedArr)
+  console.log(planeMat4)
   
-  creatPoints('test3', 0, .25, 3)
+  
+  //creatPoints('test3', 0, .25, 3)
   // console.log(plane.__data[3])//, plane[7], plane[11])
-  // console.log(plane['m03'])//, plane[7], plane[11])
-  creatPoints('survPt', plane['m03']*0.0254, plane['m13']*0.0254, plane['m23']*0.0254)
+  // console.log(plane)//, plane[7], plane[11])
+  // console.log("Pane ", plane['m03'], plane['m13'], plane['m23'])
+  // const point1 = new Vec3(1,2,1)
+  // console.log(point1)
   
-  console.log(assetPoints.getChildByName('point-survPt'))
-  console.log(plane)
+  creatPoints('anchPt', (planeMat4['m03']), (planeMat4['m13']), (planeMat4['m23']))
+  creatPoints('survPt', 0, .1, 2.5)
+  //could i return these points?
+  // creatPoints('survPt', plane['m03'], plane['m13'], plane['m23']) GlobalXfo
+  
+  const surveyPoint = assetPoints.getChildByName('point-survPt').getParameter('GlobalXfo').getValue().tr
+  const anchPoint = assetPoints.getChildByName('point-anchPt').getParameter('GlobalXfo').getValue().tr
+  
+  // console.log(surveyPoint)
+  
+  // projPoint(plane,"anchPt","survPt")
+  
+  
+  ////////////////////////////////
+  // Display the error as a line.
+  // Note: there is scaling in the CADAsset hierarchy
+  // as part of the units conversion from inches to meters.
+  // markerXfo.sc.set(1, 1, 1)
+  
+  const deviation = planeMat4.inverse().transformVec3(surveyPoint)
+  console.log(deviation - anchPoint)
+  // const pointInPlaneSpace = plane.transformVec3(surveyPoint)
+  
+  // console.log(assetPoints.getChildByName('point-survPt'))
+  // console.log(plane)
   //point1
+  const errorLinesMaterial = new Material('myMat', 'SimpleSurfaceShader')
+  // const pixelsPerMeter = this.config.getParameter('Label Size').getValue()
+  const pixelsPerMeter = 300
   
+  
+  
+  const markerXfo = assetPoints.getChildByName('point-anchPt').getParameter('GlobalXfo').getValue().clone()
+  
+  const errorline = new Lines()
+  errorline.setNumVertices(4)
+  errorline.setNumSegments(3)
+  errorline.setSegmentVertexIndices(0, 0, 1)
+  errorline.setSegmentVertexIndices(1, 1, 2)
+  errorline.setSegmentVertexIndices(2, 2, 3)
+
+  
+  const positions = errorline.getVertexAttribute('positions')
+  positions.getValueRef(0).setFromOther(new Vec3(0, 0, 0))
+  // positions.getValueRef(0).setFromOther(new Vec3(anchPoint))
+  positions.getValueRef(1).setFromOther(new Vec3(deviation.x, 0, 0))
+  positions.getValueRef(2).setFromOther(new Vec3(deviation.x, deviation.y, 0))
+  positions.getValueRef(3).setFromOther(new Vec3(deviation.x, deviation.y, deviation.z))
+  
+
+  const errorlineItem = new GeomItem('ErrorLine', errorline, errorLinesMaterial)
+  
+  markerXfo.fromMat4(planeMat4)
+  
+  
+  // console.log(markerXfo)
+  // console.log(errorlineItem.getParameter('GlobalXfo'))
+  errorlineItem.getParameter('GlobalXfo').setValue(markerXfo)
+  errorlineItem.setOverlay(true)
+  
+  
+  
+  scene.getRoot().addChild(errorlineItem, true);
+  
+  ////////////////////////////////
+  // Display the deviation.
+
+  const labelOffset = new Vec3(0.0, 0.0, -150 / pixelsPerMeter)
+  
+  // Note: negate the x value to convert to a left handed
+  // coordinate system.
+  // const disp = invcoordSpaceXfo.transformVec3(deviation);
+  const disp = deviation
+  // const threshold = this.config.getParameter('Error Tolerance').getValue()
+  const threshold = .0254*.25
+  
+  let exceedsThreshold = false
+  disp.asArray().forEach((val) => (exceedsThreshold |= Math.abs(val) > threshold))
+
+  const color = new Color(1, 2, 0);
+  const precision = 5
+  const valsStrings = []
+  disp.asArray().forEach((val) => valsStrings.push(val.toFixed(precision)))
+  const text = `X: ${valsStrings[0]}\nY: ${valsStrings[1]}\nZ: ${valsStrings[2]}`
+  const fontcolor = new Color(1, 0, 0);
+  const outlineColor = new Color(1, 1, 1);
+  
+  const labelImage = new Label('test survey' + 'Error')
+  labelImage.getParameter('Text').setValue(text)
+  labelImage.getParameter('FontSize').setValue(24)
+  // labelImage.getParameter('FontColor').setValue(labelFontColor)
+  labelImage.getParameter('FontColor').setValue(fontcolor)
+  labelImage.getParameter('BackgroundColor').setValue(color)
+  labelImage.getParameter('OutlineColor').setValue(outlineColor)
+  labelImage.getParameter('BorderWidth').setValue(3)
+  labelImage.getParameter('Margin').setValue(6)
+
+  const billboard = new BillboardItem('ErrorBillboard', labelImage)
+  // billboard.getParameter('LocalXfo').setValue(new Xfo(labelOffset))
+  billboard.getParameter('LocalXfo').setValue(markerXfo)
+  billboard.getParameter('PixelsPerMeter').setValue(pixelsPerMeter)
+  billboard.getParameter('AlignedToCamera').setValue(true)
+  billboard.getParameter('DrawOnTop').setValue(true)
+  billboard.getParameter('Alpha').setValue(1.0)
+
+  
+  
+  // billboards.getChildByName('billboard').addChild(billboard, false)
+  scene.getRoot().addChild(billboard)
   
 })
+// scene.getRoot().addChild(cadAsset)
