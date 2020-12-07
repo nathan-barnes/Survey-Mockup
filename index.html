@@ -108,25 +108,4 @@
   </body>
 </html>
 
-<script>
 
-  const toolbar = document.createElement('zea-toolbar')
-  
-  toolbar.tools = {
-      cameraManipulator: {
-        tag: 'zea-toolbar-tool',
-        data: {
-          iconName: 'camera-outline',
-          toolName: 'Camera Manipulator',
-          callback:  () => useCameraManipulator(),
-        },
-      }
-    
-    
-    const useCameraManipulator = () => {
-    renderer.getViewport().setManipulator(cameraManipulator)
-
-    freeHandLineTool.deactivateTool()
-    canvas.style.cursor = 'auto'
-  }
-</script>
