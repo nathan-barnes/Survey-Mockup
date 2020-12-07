@@ -50,7 +50,7 @@
       cell-a-size="50"
       resize-cell-a="false"
       cell-b-size="100%"
-      cell-c-size="0px"
+      cell-c-size="50px"
       resize-cell-c="false"
     >
       <div slot="a" class="App-header">
@@ -59,11 +59,24 @@
           class="App-logo"
           src="https://cdn.glitch.com/902123f3-ae96-4804-b014-ff54744cf91a%2Flogo-zea.svg?v=1600384733817"
         />
-        <div class="UserChipSetHolder">
-          <zea-user-chip-set id="zea-user-chip-set"></zea-user-chip-set>
+        <div class="MenuHolder">
+          <zea-menu type="dropdown" show-anchor="true">
+            <zea-menu-item>
+              Anchor Selection
+              <zea-menu-subitems>
+                <zea-menu-item class="MenuItem" callback="{useMeasurementTool}" id="anchor" >MBU</zea-menu-item>
+              </zea-menu-subitems>
+              </zea-menu-item>
+          </zea-menu>
         </div>
-        <zea-user-chip id="zea-user-chip"></zea-user-chip>
+        
+        
+        
+
+        
+        
       </div>
+      
       <zea-layout
         slot="b"
         cell-a-size="200px"
@@ -76,6 +89,23 @@
         </div>
         <div slot="b" id="renderer"></div>
       </zea-layout>
+      
+      <zea-layout
+        slot="c"
+        cell-a-size="0px"
+        cell-b-size="100%"
+        cell-c-size="0px"
+      >
+          <div slot="b"  class="UserChipSetHolder">
+            <zea-user-chip-set id="zea-user-chip-set"></zea-user-chip-set>
+          </div>
+          <zea-user-chip id="zea-user-chip"></zea-user-chip>
+          
+        <div slot="b" id="chip"></div>
+      </zea-layout>
+      
     </zea-layout>
   </body>
 </html>
+
+
